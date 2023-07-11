@@ -60,7 +60,6 @@ HOMEPATH = pathlib.Path('/', config.get('SERVER', 'homepath'))
 SECRET_KEY_LENGTH = config.getint('SERVER', 'secret_key_length')
 app = Flask(__name__, static_folder=None, static_url_path=HOMEPATH.joinpath('static').as_posix())
 app.config['SECRET_KEY'] = os.urandom(SECRET_KEY_LENGTH).hex()
-# app.json_provider_class = CustomJSONEncoder
 app.json = CustomJSONProvider(app)
 
 # --------------------------------------------------
