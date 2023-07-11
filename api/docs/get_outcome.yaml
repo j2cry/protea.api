@@ -1,0 +1,38 @@
+Get outcome info
+---
+tags:
+  - demo
+description: Get raw outcome info, according to given projects
+parameters:
+  - $ref: '#/components/TokenParameter'
+  - $ref: '#/components/StartTimeParameter'
+  - $ref: '#/components/EndTimeParameter'
+  - $ref: '#/components/ProjectIdsParameter'
+responses:
+  200:
+    description: OK
+    headers:
+      $ref: '#/components/ResponseHeaders'
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              project_id:
+                type: integer
+                summary: Project identifier
+                example: 7
+              spent:
+                type: float
+                summary: Spent value
+                example: 62.11
+              sysmoment:
+                type: str
+                summary: Datetime in ISO format
+                example: '2007-02-12T07:44:59'
+  401:
+    description: Invalid token or token scopes
+  429:
+    description: Too many requests

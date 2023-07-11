@@ -1,0 +1,83 @@
+swagger: null
+openapi: "3.0.3"
+info:
+  title: Protea.API by fragarie
+  description: |
+    Protea API is a simple API framework for building your own API. Just configurate it.
+  version: 0.1.0
+  # termsOfService: https://fragarie.dev/protea.api
+  contact:
+    name: Fragarie Developer
+    email: fragarie.dev@yandex.com
+    url: https://fragarie.dev
+  license:
+    name: MIT
+# servers:
+#   - url: /
+
+
+components:
+  TokenParameter:
+    name: token
+    description: API access token
+    required: true
+    in: header
+    type: string
+  
+  ClientIdsParameter:
+    name: clientIds
+    description: Filter by client identifier
+    in: query
+    schema:
+      type: array
+      items:
+        type: integer
+
+  ProjectIdsParameter:
+    name: projectIds
+    description: Filter by project identifier
+    in: query
+    schema:
+      type: array
+      items:
+        type: integer
+
+  IncludeDeletedParameter:
+    name: includeDeleted
+    description: Include deleted rows
+    in: query
+    schema:
+      type: boolean
+
+  StartTimeParameter:
+    name: startTime
+    description: Start time bound in ISO format
+    required: true
+    in: query
+    schema:
+      type: string
+    example: '2007-02-12 07:31:29'
+
+  EndTimeParameter:
+    name: endTime
+    description: End time bound in ISO format
+    required: true
+    in: query
+    schema:
+      type: string
+    example: '2007-02-12 07:31:29'
+
+
+  ResponseHeaders:
+    X-RateLimit-Limit:
+      description: The total number of requests allowed for the active window
+      type: integer
+    X-RateLimit-Remaining:
+      description: The number of requests remaining in the active window
+      type: integer
+    X-RateLimit-Reset:
+      description: UTC seconds since epoch when the window will be reset
+      type: integer
+    Retry-After:
+      description: Seconds to retry after
+      type: integer
