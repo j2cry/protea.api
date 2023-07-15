@@ -42,8 +42,7 @@ for section in config.sections():
         )
     get_scopes_query = config.get(section, 'get_scopes_query').strip()
     array_to_string = config.getboolean(section, 'array_to_string', fallback=Default.ARRAY_TO_STRING)
-    page_size = config.getint(section, 'page_size', fallback=Default.PAGE_SIZE)
-    db[name] = StorageDesc(create_engine(_connstr), get_scopes_query, array_to_string, page_size)
+    db[name] = StorageDesc(create_engine(_connstr), get_scopes_query, array_to_string)
     # check connection
     with db[name].engine.connect() as cursor:
         pass

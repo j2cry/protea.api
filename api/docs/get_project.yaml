@@ -8,6 +8,7 @@ parameters:
   - $ref: '#/components/ClientIdsParameter'
   - $ref: '#/components/ProjectIdsParameter'
   - $ref: '#/components/IncludeDeletedParameter'
+  - $ref: '#/components/NextRowsParameter'
 responses:
   200:
     description: OK
@@ -16,22 +17,27 @@ responses:
     content:
       application/json:
         schema:
-          type: array
-          items:
-            type: object
-            properties:
-              client_id:
-                type: integer
-                summary: Client identifier
-                example: 4
-              project_id:
-                type: integer
-                summary: Project identifier
-                example: 7
-              project_name:
-                type: string
-                summary: Project name
-                example: Delta_project_#07
+          type: object
+          properties:
+            paging:
+              $ref: '#/components/ResponsePaging'
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  client_id:
+                    type: integer
+                    summary: Client identifier
+                    example: 4
+                  project_id:
+                    type: integer
+                    summary: Project identifier
+                    example: 7
+                  project_name:
+                    type: string
+                    summary: Project name
+                    example: Delta_project_#07
   401:
     description: Invalid token or token scopes
   429:

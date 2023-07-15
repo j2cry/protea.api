@@ -2,14 +2,16 @@ import re
 import json
 from functools import wraps
 from sqlalchemy import text
+from collections import defaultdict
 from flask import make_response, request, jsonify
 from flasgger import swag_from
 
 from . import config, app, limiter, db, HOMEPATH
-from .service import APIPoint, _parse_query_args, _convert_types, BadRequest, InvalidScopes, InternalError
+from .service import APIPoint, PagingResult, _parse_query_args, _convert_types, BadRequest, InvalidScopes, InternalError
 
 
 LIMITS = {}
+PAGINATION = defaultdict(dict)
 
 # --------------------------------------------------
 # routing
@@ -63,14 +65,33 @@ def _api_callable(point: APIPoint):
 
         # run query
         try:
-            with db[point.storage].engine.connect() as cursor:
-                # TODO pagination
-                fetched = cursor.execute(text(_query), parameters=params).all()
-                data = jsonify([dict(row._mapping) for row in fetched])
+            # try to get existing cursor result or receive the new one
+            try:
+                assert 'nextRows' in params
+                paging = PAGINATION[token][point.endpoint]
+            except:
+                with db[point.storage].engine.connect() as cursor:
+                    paging = PagingResult(cursor.execute(text(_query), parameters=params))
+            # fetch the next page
+            fetched = paging.getnext(params.get('nextRows', paging.rows_count))
         except Exception as ex:
             raise InternalError(str(ex))
-        
-        return make_response(data, 200)
+
+        # build response body
+        _response = {
+            'data': [dict(row._mapping) for row in fetched],
+            'paging': {
+                'rows_count': paging.rows_count,
+                'rows_left': paging.rows_left
+            }
+        }
+        # handle cursor result
+        if paging.exhausted:
+            PAGINATION[token].pop(point.endpoint, None)
+        else:
+            PAGINATION[token][point.endpoint] = paging
+
+        return make_response(jsonify(_response), 200)
     return _api_endpoint_function
 
 

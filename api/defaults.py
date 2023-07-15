@@ -12,4 +12,3 @@ class Default:
     LIMITER_STORAGE = 'memory://'
 
     ARRAY_TO_STRING = True
-    PAGE_SIZE = 100

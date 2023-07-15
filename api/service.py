@@ -5,6 +5,7 @@ from configparser import RawConfigParser, NoSectionError, NoOptionError, _UNSET
 from decimal import Decimal
 from collections import namedtuple
 from flask.json.provider import JSONProvider
+from sqlalchemy import CursorResult
 
 from .defaults import Default
 
@@ -23,7 +24,7 @@ class CustomConfigParser(RawConfigParser):
                 # stderr = f'Parameter `[{section}] {option}` is not set and has no default value.'
                 raise NoOptionError(option, section)
         return value
-    
+
     def collect(self, section, tags, convert=True):
         _result = {}
         _tags = tags.split('.') if isinstance(tags, str) else tags
@@ -56,7 +57,23 @@ class CustomJSONProvider(JSONProvider):
 
 # --------------------------------------------------
 APIPoint = namedtuple('APIPoint', 'endpoint,rule,method,scopes,query,storage,defaults')
-StorageDesc = namedtuple('StorageDesc', 'engine,scopes_query,array_to_string,page_size')
+StorageDesc = namedtuple('StorageDesc', 'engine,scopes_query,array_to_string')
+
+# --------------------------------------------------
+class PagingResult:
+    def __init__(self, cursor_result: CursorResult):
+        self.__cr = cursor_result
+        self.rows_count = cursor_result.rowcount
+        self.rows_left = cursor_result.rowcount
+
+    def getnext(self, size: int = None):
+        self.rows_left = max(0, self.rows_left - size)
+        return self.__cr.fetchmany(size)
+
+    @property
+    def exhausted(self) -> bool:
+        return self.rows_left == 0
+
 
 # --------------------------------------------------
 def _parse_query_args(args):

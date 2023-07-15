@@ -55,8 +55,6 @@ _get_scopes_query_ - query for receiving token scopes (1 scope per row). If your
 
 _array_to_string_ - experimental parameter for Postgres extended support. Set false to transfer arrays to the database connector without conversion (if your database supports such data types).
 
-_page_size_ - default page size for pagination (__NOT IMPLEMENTED__)
-
 
 ### API endpoint configuration
 
@@ -68,6 +66,13 @@ method = GET                # required; acceptable endpoint HTTP-method
 limit = 2 per minute        # API method limit
 scopes = ...                # token scopes required for this endpoint. Don't set if your architecture does not provide access scopes for tokens
 query = SELECT :variable    # query for receiving data
-default.{variable}          # default value for variables in the query
+default.{variable}          # default value for :variable in the query
 docfile = docs/method.yaml  # path to the method docs
 ```
+
+### Default API method parameters
+_rowsNext_ - is an in-built parameter for pagination. If it is not specified or is NULL-like*, then all rows would be returned.
+    __Pay attention!__
+    In pagination mode, for each method, the result of the request is saved for the token without binding to the HTTP-session.
+
+*NULL-like values are `None`, `False`, `0` or `""` (empty string).

@@ -22,7 +22,15 @@ components:
     description: API access token
     required: true
     in: header
-    type: string
+    schema:
+      type: string
+  
+  NextRowsParameter:
+    name: nextRows
+    description: Number of rows to fetch (for getting result in pagination mode). Return all rows if parameter is NULL-like
+    in: query
+    schema:
+      type: integer
   
   ClientIdsParameter:
     name: clientIds
@@ -81,3 +89,15 @@ components:
     Retry-After:
       description: Seconds to retry after
       type: integer
+
+  ResponsePaging:
+    type: object
+    properties:
+      rows_count:
+        summary: Total requested rows
+        type: integer
+        example: 17
+      rows_left:
+        summary: Rows left to fetch
+        type: integer
+        example: 16
