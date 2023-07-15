@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  protea-redis:
+    image: redis:7
+    container_name: limiter_storage
+    ports:
+      - 6379:6379
+
+  protea-api:
+    build:
+      context: .
+    environment:
+      - PROTEA__MSSQL_PASSWORD=...
+      - PROTEA__POSTGRES_PASSWORD=...
+      - PROTEA__POSTGRES_ARRAY_PASSWORD=...
+    container_name: protea-api
+    volumes:
+      - ./conf.d:/home/protea/conf.d
+      - ./api/docs:/home/protea/api/docs
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - protea-redis

@@ -1,0 +1,9 @@
+/.vscode/
+/demo/
+/venv/
+/api/docs
+/conf.d/
+*.env
+docker-compose.yaml
+*.ipynb
+TODO
