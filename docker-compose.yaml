@@ -18,6 +18,8 @@ services:
     volumes:
       - ./conf.d:/home/protea/conf.d
       - ./api/docs:/home/protea/api/docs
+    expose:
+      - 23001
     labels:
       - traefik.enable=true
       - traefik.http.routers.protea.rule=PathPrefix(`/`)
