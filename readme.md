@@ -34,6 +34,9 @@ Connection parameters can be specified in one of two ways:
 # as connection string
 [CONNECTION:{connection_name}]
 connection = mssql+pyodbc://sa:{password}@localhost:1433/master?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes
+
+get_scopes_query = ...
+array_to_string = true
 ```
 or
 ```ini
@@ -46,9 +49,9 @@ host = localhost
 port = 1433
 database = master
 query = {'driver': 'ODBC Driver 18 for SQL Server', 'TrustServerCertificate': 'yes'}
+
 get_scopes_query = ...
 array_to_string = true
-page_size = 100
 ```
 
 _get_scopes_query_ - query for receiving token scopes (1 scope per row). If your architecture does not provide access scopes for tokens, you can return any value that is not equivalent to NULL.
