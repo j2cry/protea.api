@@ -82,7 +82,7 @@ swagger_config = {
         'model_filter': lambda tag: True,
     }],
     # "static_url_path": "/static",
-    'specs_route': pathlib.Path('/', config.get('SERVER', 'docspath')).as_posix() + '/',
+    'specs_route': HOMEPATH.as_posix(),
     # "url_prefix": "/"
 }
 swagger = Swagger(app, config=swagger_config, template_file='docs/default.yaml', merge=True)

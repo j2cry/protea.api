@@ -18,6 +18,9 @@ services:
     volumes:
       - ./conf.d:/home/protea/conf.d
       - ./api/docs:/home/protea/api/docs
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.protea.rule=PathPrefix(`/`)
     restart: unless-stopped
     depends_on:
       - protea-redis
