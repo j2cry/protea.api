@@ -19,6 +19,5 @@ services:
       - ./conf.d:/home/protea/conf.d
       - ./api/docs:/home/protea/api/docs
     restart: unless-stopped
-    network_mode: host
     depends_on:
       - protea-redis
