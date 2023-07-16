@@ -4,8 +4,8 @@ services:
   protea-redis:
     image: redis:7
     container_name: limiter_storage
-    ports:
-      - 6379:6379
+    networks:
+      - protea-net
 
   protea-api:
     build:
@@ -20,9 +20,14 @@ services:
       - ./api/docs:/home/protea/api/docs
     expose:
       - 23001
+    networks:
+      - protea-net
     labels:
       - traefik.enable=true
       - traefik.http.routers.protea.rule=PathPrefix(`/`)
     restart: unless-stopped
     depends_on:
       - protea-redis
+
+networks:
+  - protea-net
