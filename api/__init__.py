@@ -73,6 +73,7 @@ limiter = Limiter(
 
 # --------------------------------------------------
 # init Swagger
+# app.config['SWAGGER'] = { 'favicon': '...' }  # TODO ?
 swagger_config = {
     'title': 'Protea.API',
     'specs': [{
